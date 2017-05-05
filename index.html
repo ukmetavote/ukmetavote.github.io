@@ -1,0 +1,105 @@
+<html>
+<head>
+  <title>WTFDIVF</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class="container">
+
+<nav class="navbar">
+    <div>
+      <a  href="/">WTFDIVF</a>
+    </div>
+    <div >
+        <a href="about.html">About</a> 
+   </div>
+</nav>
+
+  <h1>WTFDIVF</h1>
+  <h2>Think Brexit is a terrible idea? The 2017 General Election is your last chance. Don't give Theresa May a blank cheque to push through hard Brexit. Vote for an MP who'll stop this shit. But who?</h2>
+<script type='text/javascript'>    
+  var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/1tw3d5e2g5ikoLAjDLUVjjmVE_WXxX_ja2wtc90l9bXM/pub?gid=0&single=true&output=csv';
+
+  function init() {
+    Tabletop.init( { key: publicSpreadsheetUrl,
+                     callback: showInfo,
+                     simpleSheet: true } )
+  }
+
+  function showInfo(data, tabletop) {
+   var newarray = [];
+   for (entry in data) {
+	constituency = data[entry].Constituency;
+        mp = data[entry].MP;
+        vote = data[entry].Vote;
+        note = data[entry].Note;
+	newarray[constituency] = [];
+	newarray[constituency]['MP'] = mp;
+	newarray[constituency]['Vote'] = vote;
+	newarray[constituency]['Note'] = note;
+    }
+
+    window.spreadsheet = newarray;
+    // alert('Successfully processed!')
+    // console.log(data);
+  }
+
+  window.addEventListener('DOMContentLoaded', init)
+</script>
+
+<form id="form">
+
+<label>Enter your postcode</label>
+<input id="queryinput" type="text" class="form-control" placeholder="SW1A 0AA"></input>
+
+<button  id="votebutton" type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">Who the fuck do I vote for?</button>
+
+  <div id="resultscontainer"></div>
+
+<script type="text/javascript">
+
+$('#votebutton').on('click', function(event) {	
+	var postcode = encodeURIComponent($('#queryinput').val());
+	var url = "https://www.theyworkforyou.com/api/getConstituency?key=DwnyKLEYNfkFDDyRGAEsUE8a&output=js&postcode=" + postcode;
+	output = $.getJSON( url, function(data) {
+		var constituency;
+		var const_data;
+		if(data.hasOwnProperty('error')){ 
+			alert('Error - I cannot recognise that postcode');
+		} else {
+			constituency = data.guardian_name;
+			const_data = window.spreadsheet[constituency] || window.spreadsheet[data.name]
+			var mp = const_data.MP;
+			var vote = const_data.Vote;
+			var note = const_data.Note;
+
+			var message1 = 'You live in the ' + constituency + ' constituency.';
+			var message2 = "";
+
+			if (mp != "") {
+				message1 += ' So vote for ' + mp + ', the ' + vote + ' candidate, for the best chance of beating Brexit.';
+			} else if (vote != "") {
+				message1 += ' So vote for the ' + vote + ' candidate, for the best chance of beating Brexit.';
+			
+			}
+			if (note != "") {
+				message2 = note;
+			}
+			$('#resultscontainer').html(message1 + ' ' + message2); 
+
+		}	
+
+		
+
+	});
+
+});
+
+</script>
+
+</div>
+</body>
+</html>
