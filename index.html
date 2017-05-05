@@ -5,6 +5,8 @@
   <script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="awesomplete.css" />
+<script src="awesomplete.min.js" async></script>
 </head>
 <body>
 <div class="container">
@@ -31,8 +33,10 @@
 
   function showInfo(data, tabletop) {
    var newarray = [];
+   var awesomelist=[];
    for (entry in data) {
 	constituency = data[entry].Constituency;
+	awesomelist.push(constituency);
         mp = data[entry].MP;
         vote = data[entry].Vote;
         note = data[entry].Note;
@@ -45,6 +49,9 @@
     window.spreadsheet = newarray;
     // alert('Successfully processed!')
     // console.log(data);
+    var input = document.getElementById("constituency");
+    var awesomplete = new Awesomplete(input);
+    awesomplete.list = awesomelist;
   }
 
   window.addEventListener('DOMContentLoaded', init)
@@ -52,49 +59,68 @@
 
 <form id="form">
 
-<label>Enter your postcode</label>
-<input id="queryinput" type="text" class="form-control" placeholder="SW1A 0AA"></input>
-
+<div><label>Enter your postcode</label>
+<input id="queryinput" type="text" class="form-control" placeholder="SW1A 0AA"></input></div>
+<div><label>Or your constituency</label>
+  <input id="constituency" name="constituency" list="conslist"   data-minchars=1  data-maxitems=20/>
+</div>
 <button  id="votebutton" type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">Who the fuck do I vote for?</button>
 
   <div id="resultscontainer"></div>
 
 <script type="text/javascript">
+function votemessage(constituency,altname="") {
+    var const_data = window.spreadsheet[constituency] || window.spreadsheet[altname];
+    var mp,vote,note;
+    var message1 = 'You live in the ' + constituency + ' constituency.';
+    if (const_data) {
+        mp = const_data.MP;
+        vote = const_data.Vote;
+        note = const_data.Note;
+    } else {
+        message1 = 'Never heard of the ' + constituency + ' constituency.';
+    }
+    
 
+    var message2 = "";
+
+    if (mp) {
+        message1 += ' So vote for ' + mp + ', the ' + vote + ' candidate, for the best chance of beating Brexit.';
+    } else if (vote) {
+        message1 += ' So vote for the ' + vote + ' candidate, for the best chance of beating Brexit.';
+    
+    }
+    if (note) {
+        message2 = note;
+    }
+    $('#resultscontainer').html(message1 + ' ' + message2); 
+}
 $('#votebutton').on('click', function(event) {	
-	var postcode = encodeURIComponent($('#queryinput').val());
-	var url = "https://www.theyworkforyou.com/api/getConstituency?key=DwnyKLEYNfkFDDyRGAEsUE8a&output=js&postcode=" + postcode;
-	output = $.getJSON( url, function(data) {
-		var constituency;
-		var const_data;
-		if(data.hasOwnProperty('error')){ 
-			alert('Error - I cannot recognise that postcode');
-		} else {
-			constituency = data.guardian_name;
-			const_data = window.spreadsheet[constituency] || window.spreadsheet[data.name]
-			var mp = const_data.MP;
-			var vote = const_data.Vote;
-			var note = const_data.Note;
-
-			var message1 = 'You live in the ' + constituency + ' constituency.';
-			var message2 = "";
-
-			if (mp != "") {
-				message1 += ' So vote for ' + mp + ', the ' + vote + ' candidate, for the best chance of beating Brexit.';
-			} else if (vote != "") {
-				message1 += ' So vote for the ' + vote + ' candidate, for the best chance of beating Brexit.';
-			
-			}
-			if (note != "") {
-				message2 = note;
-			}
-			$('#resultscontainer').html(message1 + ' ' + message2); 
-
-		}	
-
-		
-
-	});
+    var postcodefield = document.getElementById("queryinput");
+    var rawpostcode = postcodefield.value;
+    if (rawpostcode) {
+        postcodefield.value="";
+        postcodefield.placeholder = rawpostcode;
+    }
+    var postcode = encodeURIComponent(rawpostcode);
+	var cons = document.getElementById("constituency").value;
+	if (postcode) {
+        var url = "https://www.theyworkforyou.com/api/getConstituency?key=DwnyKLEYNfkFDDyRGAEsUE8a&output=js&postcode=" + postcode;
+        output = $.getJSON( url, function(data) {
+            var constituency;
+            var const_data;
+            if(data.hasOwnProperty('error')){ 
+                alert('Error - I cannot recognise that postcode');
+            } else {
+                constituency = data.guardian_name;
+                document.getElementById("constituency").value=constituency;
+                votemessage(constituency,data.name);
+            }	
+        });
+    
+	} else if (cons) {
+	    votemessage(cons);
+    }
 
 });
 

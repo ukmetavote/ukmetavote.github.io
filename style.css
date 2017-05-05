@@ -17,6 +17,7 @@ nav {
     border: 1px solid grey;
     }
 label,input,select,button {font-size: 1.2em;}
+input#constituency {width:21em;}
 #resultscontainer {
     font-size: 1.25em;
     line-height: 1.5em;
