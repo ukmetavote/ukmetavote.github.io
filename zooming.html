@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.background {
+  fill: none;
+  pointer-events: all;
+}
+
+.seat {
+  fill: white;
+  stroke: black;
+  stroke-width: .15px;
+  cursor: pointer;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.seat.active {
+  fill: orange;
+}
+
+.mesh {
+  fill: none;
+  stroke: #fff;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+</style>
+<body>
+<div id="info"><h1 id="name"></h1><h2 id="scale"></h2></div>
+
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script>
+
+var width = 960,
+    height = 800,
+    active = d3.select(null);
+var maxscale = 30;
+//Define map projection
+var projection = d3.geo.azimuthalEqualArea()
+                       .translate([0, 0])
+                       .scale(1);
+
+//Define path generator
+var path = d3.geo.path()
+                 .projection(projection);
+
+var zoom = d3.behavior.zoom()
+    .translate([0, 0])
+    .scale(1)
+    .scaleExtent([1, maxscale])
+    .on("zoom", zoomed);
+
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .on("click", stopped, true);
+
+svg.append("rect")
+    .attr("class", "background")
+    .attr("width", width)
+    .attr("height", height)
+    .on("click", reset);
+
+var g = svg.append("g");
+
+svg
+    .call(zoom) // delete this line to disable free zooming
+    .call(zoom.event);
+
+d3.json("Westminster_Parliamentary_Constituencies_December_2016_Ultra_Generalised_Clipped_Boundaries_in_Great_Britain.geojson", function(error, seats) {
+//d3.json("Westminster_Parliamentary_Constituencies_December_2016_Generalised_Clipped_Boundaries_in_Great_Britain.geojson", function(error, seats) {
+  if (error) throw error;
+
+    // Calculate bounding box transforms for entire collection
+    var b = path.bounds( seats ),
+    s = .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height),
+    t = [(width - s * (b[1][0] + b[0][0])) / 2, (height - s * (b[1][1] + b[0][1])) / 2];
+
+    // Update the projection    
+    projection
+      .scale(s)
+      .translate(t);
+
+  g.selectAll("path")
+      .data(seats.features)
+    .enter().append("path")
+      .attr("d", path)
+      .attr("class", "seat")
+      .on("click", clicked);
+
+});
+
+function clicked(d) {
+  if (active.node() === this) return reset();
+  active.classed("active", false);
+  active = d3.select(this).classed("active", true);
+  var name = d.properties.pcon16nm;
+  document.getElementById('name').innerHTML=name;
+
+  var bounds = path.bounds(d),
+      dx = bounds[1][0] - bounds[0][0],
+      dy = bounds[1][1] - bounds[0][1],
+      x = (bounds[0][0] + bounds[1][0]) / 2,
+      y = (bounds[0][1] + bounds[1][1]) / 2,
+      scale = Math.max(1, Math.min(maxscale, 0.9 / Math.max(dx / width, dy / height))),
+      translate = [width / 2 - scale * x, height / 2 - scale * y];
+  document.getElementById('scale').innerHTML=scale;
+
+  svg.transition()
+      .duration(750)
+      .call(zoom.translate(translate).scale(scale).event);
+}
+
+function reset() {
+  active.classed("active", false);
+  active = d3.select(null);
+
+  svg.transition()
+      .duration(750)
+      .call(zoom.translate([0, 0]).scale(1).event);
+}
+
+function zoomed() {
+  g.style("stroke-width", 1.5 / d3.event.scale + "px");
+  g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+}
+
+// If the drag behavior prevents the default click,
+// also stop propagation so we don’t click-to-zoom.
+function stopped() {
+  if (d3.event.defaultPrevented) d3.event.stopPropagation();
+}
+
+</script>

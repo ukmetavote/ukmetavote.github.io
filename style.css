@@ -1,4 +1,5 @@
-body {font-family: "Hoefler Text", Georgia, serif; background-color: white; line-height: 1.2em; max-width: 40rem; }
+body {font-family: "Hoefler Text", Georgia, serif; background-color: white; line-height: 1.2em; }
+container,nav,main { max-width: 40em;}
 h1 {font-size: 2.5em;}
 h2 {font-size: 1.25em;}
 h1, h2, h3, h4, h5, h6, nav {
@@ -23,3 +24,5 @@ input#constituency {width:21em;}
     line-height: 1.5em;
     margin: 1em;
     }
+#map {width:500px; height:500px;}
+#map svg {width:100%;height:100%}
