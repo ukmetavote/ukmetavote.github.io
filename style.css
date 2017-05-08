@@ -1,21 +1,23 @@
-body {font-family: "Hoefler Text", Georgia, serif; background-color: white; line-height: 1.2em; }
+body {font-family: "Hoefler Text", Georgia, serif; background-color: white; line-height: 1.2em; 
+    display: flex; flex-wrap:wrap;
+}
 container,nav,main { max-width: 40em;}
-h1 {font-size: 2.5em;}
+h1 {font-size: 2em;}
 h2 {font-size: 1.25em;}
 h1, h2, h3, h4, h5, h6, nav {
     font-family: "Gill Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-weight: bold;
+    font-weight: 600;
     line-height: 1.1;
     color: black;
+    margin: 0px;
+    padding: .25em;
 }
 a {text-decoration: none;}
 nav {
     display: flex;
     justify-content: space-between;
-    font-weight: normal;
-    margin: 2em;
-    padding: 1em;
-    border: 1px solid grey;
+    background: ghostwhite;
+    align-items: center;
     }
 label,input,select,button {font-size: 1.2em;}
 input#constituency {width:21em;}
@@ -24,5 +26,5 @@ input#constituency {width:21em;}
     line-height: 1.5em;
     margin: 1em;
     }
-#map {width:500px; height:500px;}
+#map {min-width:400px; overflow:hidden;}
 #map svg {width:100%;height:100%}
