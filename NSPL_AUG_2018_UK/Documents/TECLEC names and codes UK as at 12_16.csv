@@ -1,0 +1,61 @@
+﻿TECLECCD,TECLECCDO,TECLECNM
+E24000001,EE060,Norfolk
+E24000002,EE070,Cambridgeshire
+E24000003,EE080,Suffolk
+E24000004,EE090,Bedfordshire and Luton
+E24000005,EE100,Hertfordshire
+E24000006,EE110,Essex
+E24000007,EM010,Derbyshire
+E24000008,EM020,Nottinghamshire
+E24000009,EM030,Lincolnshire and Rutland
+E24000010,EM040,Leicestershire
+E24000011,EM050,Northamptonshire
+E24000012,GL120,London North
+E24000013,GL130,London West
+E24000014,GL140,London Central
+E24000015,GL150,London East
+E24000016,GL160,London South
+E24000017,NE170,Northumberland
+E24000018,NE180,Tyne and Wear
+E24000019,NE190,County Durham
+E24000020,NE200,Tees Valley
+E24000021,NW210,Cumbria
+E24000022,NW220,Lancashire
+E24000023,NW230,Greater Merseyside
+E24000024,NW240,Greater Manchester
+E24000025,NW250,Cheshire and Warrington
+E24000026,SE260,"Milton Keynes, Oxfordshire and Buckinghamshire"
+E24000027,SE270,Berkshire
+E24000028,SE280,Hampshire and the Isle of Wight
+E24000029,SE290,Surrey
+E24000030,SE300,Sussex
+E24000031,SE310,Kent and Medway
+E24000032,SW320,Devon and Cornwall
+E24000033,SW330,Somerset
+E24000034,SW340,"Bournemouth, Dorset and Poole"
+E24000035,SW350,West of England
+E24000036,SW360,Wiltshire and Swindon
+E24000037,SW370,Gloucestershire
+E24000038,WM380,Shropshire
+E24000039,WM390,Staffordshire
+E24000040,WM400,The Black Country
+E24000041,WM410,Birmingham and Solihull
+E24000042,WM420,Herefordshire and Worcestershire
+E24000043,WM430,Coventry and Warwickshire
+E24000044,YH440,North Yorkshire
+E24000045,YH450,West Yorkshire
+E24000046,YH460,South Yorkshire
+E24000047,YH470,Humberside
+L99999999,,(pseudo) Channel Islands
+M99999999,,(pseudo) Isle of Man
+N99999999,,(pseudo) Northern Ireland
+S09000001,S91,Aberdeen City and Shire
+S09000002,S92,East of Scotland
+S09000003,S93,Highlands and Islands
+S09000004,S94,South of Scotland
+S09000005,S95,Tayside
+S09000006,S96,West of Scotland
+W16000001,W150,North Wales
+W16000002,W160,South West/Mid Wales
+W16000003,W170,South Wales
+W16000004,W180,South East Wales

@@ -1,0 +1,15 @@
+﻿EER10CD,EER10CDO,EER10NM
+E15000001,01,North East
+E15000002,02,North West
+E15000003,03,Yorkshire and The Humber
+E15000004,04,East Midlands
+E15000005,05,West Midlands
+E15000006,06,Eastern
+E15000007,07,London
+E15000008,08,South East
+E15000009,09,South West
+L99999999,,(pseudo) Channel Islands
+M99999999,,(pseudo) Isle of Man
+N07000001,12,Northern Ireland
+S15000001,11,Scotland
+W08000001,10,Wales
