@@ -33,7 +33,8 @@
                         .attr("height", h);
 
             //Load in GeoJSON data
-            d3.json("European_Electoral_Regions_December_2015_Ultra_Generalised_Clipped_Boundaries_in_Great_Britain.geojson", function(json) {
+            d3.json("European_Electoral_Regions_December_2017_UK_BUC.geojson", function(json) {
+            //d3.json("European_Electoral_Regions_December_2015_Ultra_Generalised_Clipped_Boundaries_in_Great_Britain.geojson", function(json) {
 
                 // Calculate bounding box transforms for entire collection
                 var b = path.bounds( json ),
@@ -51,11 +52,11 @@
                    .data(json.features)
                    .enter()
                    .append("path")
-                   .attr("id",d => {return d.properties.eer15cd})
-                   .attr("name",d => {return d.properties.eer15nm})
+                   .attr("id",d => {return d.properties.eer17cd})
+                   .attr("name",d => {return d.properties.eer17nm})
                    .attr("d", path)
                    .on('mouseover', function(d){
-			var name = d.properties.eer15nm;
+			var name = d.properties.eer17nm;
 			return document.getElementById('name').innerHTML=name;
 		});
 
