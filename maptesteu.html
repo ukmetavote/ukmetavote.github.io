@@ -51,12 +51,13 @@
                    .data(json.features)
                    .enter()
                    .append("path")
+                   .attr("id",d => {return d.properties.eer15cd})
+                   .attr("name",d => {return d.properties.eer15nm})
                    .attr("d", path)
                    .on('mouseover', function(d){
 			var name = d.properties.eer15nm;
 			return document.getElementById('name').innerHTML=name;
-		})
-                   .style("fill", "steelblue");
+		});
 
             });
 
