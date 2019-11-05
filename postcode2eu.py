@@ -17,7 +17,7 @@ def getoeu():
             postcode = line[1]
             if ' ' in postcode:
                 prefix,suffix = postcode.split()
-                eprefix = prefix+suffix[:1]
+                eprefix = prefix+' '+suffix[:1]
                 ptown = postcode[0:2]
                 ukge = line[18]
                 ukeu = line[19]
@@ -35,6 +35,20 @@ def getoeu():
                     epcode2eu[eprefix] = lookup
                 
     except GeneratorExit:
+        lookup={}
+        leftovers={}
+        for pc,val in ptown2eu.items():
+            if len(val) ==1:
+                lookup[pc]=val.keys()[0]
+        for pc,val in pcode2eu.items():
+            if len(val) ==1 and not lookup.get(pc[0:2]):
+                lookup[pc]=val.keys()[0]
+        for pc,val in epcode2eu.items():
+            if len(val) ==1 and not lookup.get(pc[0:2]) and not lookup.get(pc[:-2]):
+                lookup[pc]=val.keys()[0]
+        print json.dumps(lookup, sort_keys=True,
+                  indent=2, separators=(',', ':'))
+            
         print json.dumps(ptown2eu, sort_keys=True,
                   indent=2, separators=(',', ':'))
         print json.dumps(pcode2eu, sort_keys=True,
