@@ -51,6 +51,8 @@
                    .data(json.features)
                    .enter()
                    .append("path")
+                   .attr("id",d => {return d.properties.pcon16cd})
+                   .attr("name",d => {return d.properties.pcon16nm})
                    .attr("d", path)
                    .on('mouseover', function(d){
 			var name = d.properties.pcon16nm;
