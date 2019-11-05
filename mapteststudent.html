@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>D3: Setting path fills</title>
+  <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
+        <style type="text/css">
+            /* No style rules here yet */       
+        </style>
+    </head>
+    <body>
+        <div id="info"><h1 id="name"></h1></div>
+
+<script type="text/javascript">
+  var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSOwrEd4AIxbJiZPCIqUYIAlF5HhR_G7cVFyflCuOSObExfG33RIWZqBAiGlhpGLGGoydvlOdcpM3Dz/pub?gid=0&single=true&output=csv';
+  function init() {
+    Tabletop.init( { key: publicSpreadsheetUrl,
+                     callback: showInfo,
+                     simpleSheet: true } )
+  }
+
+  function showInfo(data, tabletop) {
+   var newarray = [];
+   var awesomelist=[];
+   const colours={'0':'white','1':'lightgrey',2:'yellow','3':'orange','4':'red'};
+   for (entry in data) {
+        constituency = data[entry].Constituency;
+        awesomelist.push(constituency);
+
+        id = data[entry].id;
+        priority = data[entry].Priority;
+        newarray[id] = priority;
+    }
+    
+    window.spreadsheet = newarray;
+            //Width and height
+            var w = 1000;
+            var h = 800;
+
+            //Define map projection
+            var projection = d3.geo.mercator()
+                                   .translate([0, 0])
+                                   .scale(1);
+
+            //Define path generator
+            var path = d3.geo.path()
+                             .projection(projection);
+
+            //Create SVG element
+            var svg = d3.select("body")
+                        .append("svg")
+                        .attr("width", w)
+                        .attr("height", h);
+
+            //Load in GeoJSON data
+            d3.json("Westminster_Parliamentary_Constituencies_December_2016_Ultra_Generalised_Clipped_Boundaries_in_Great_Britain.geojson", function(json) {
+
+                // Calculate bounding box transforms for entire collection
+                var b = path.bounds( json ),
+                s = .95 / Math.max((b[1][0] - b[0][0]) / w, (b[1][1] - b[0][1]) / h),
+                t = [(w - s * (b[1][0] + b[0][0])) / 2, (h - s * (b[1][1] + b[0][1])) / 2];
+
+                // Update the projection    
+                projection
+                  .scale(s)
+                  .translate(t);
+
+
+                //Bind data and create one path per GeoJSON feature
+                svg.selectAll("path")
+                   .data(json.features)
+                   .enter()
+                   .append("path")
+                   .attr("id",d => {return d.properties.pcon16cd})
+                   .attr("name",d => {return d.properties.pcon16nm})
+                   .attr("d", path)
+                   .on('mouseover', function(d){
+			var name = d.properties.pcon16nm;
+			return document.getElementById('name').innerHTML=name;
+		})
+                   .style("fill", "steelblue");
+
+            });
+    var input = document.getElementById("constituency");
+    var awesomplete = new Awesomplete(input);
+    awesomplete.list = awesomelist;
+  }
+
+  window.addEventListener('DOMContentLoaded', init)
+
+
+
+        </script>
+    </body>
+</html>
