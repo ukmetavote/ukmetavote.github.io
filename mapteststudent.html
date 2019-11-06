@@ -14,7 +14,7 @@
         <div id="info"><h1 id="name"></h1></div>
 
 <script type="text/javascript">
-  var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSOwrEd4AIxbJiZPCIqUYIAlF5HhR_G7cVFyflCuOSObExfG33RIWZqBAiGlhpGLGGoydvlOdcpM3Dz/pub?gid=0&single=true&output=csv';
+  var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/1l3MtA7lFRH5EjU96NCTjMgnq3fQkG0Y_pgs6J7SJB3g/edit?usp=sharing';
   function init() {
     Tabletop.init( { key: publicSpreadsheetUrl,
                      callback: showInfo,
@@ -80,7 +80,7 @@
 			var name = d.properties.pcon16nm;
 			return document.getElementById('name').innerHTML=name;
 		})
-                   .style("fill", "steelblue");
+                   .style("fill", d=> {return colours[window.spreadsheet[d.properties.pcon16cd]]});
 
             });
     var input = document.getElementById("constituency");
